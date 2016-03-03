@@ -5,12 +5,12 @@
 
 # %%check section needs rspec-expectations, however rspec-expectations depends
 # on diff-lcs.
-%{!?need_bootstrap:	%global	need_bootstrap	1}
+%{!?need_bootstrap:	%global	need_bootstrap	0}
 
 Summary: Provide a list of changes between two sequenced collections
 Name: %{?scl_prefix}rubygem-%{gem_name}
 Version: 1.2.5
-Release: 6%{?dist}
+Release: 7%{?dist}
 Group: Development/Languages
 #lib/diff/lcs.rb is Artistic or Ruby or BSD
 #lib/diff/lcs/*.rb is GPLv2+ or Artistic or Ruby or BSD
@@ -110,7 +110,7 @@ popd
 %{gem_instdir}/spec
 
 %changelog
-* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 1.2.5-6
+* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 1.2.5-7
 - Rebuilt for rh-ror42
 
 * Fri Jan 16 2015 Josef Stribny <jstribny@redhat.com> - 1.2.5-2
