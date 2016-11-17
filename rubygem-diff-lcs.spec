@@ -5,12 +5,12 @@
 
 # %%check section needs rspec-expectations, however rspec-expectations depends
 # on diff-lcs.
-%{!?need_bootstrap:	%global	need_bootstrap	1}
+%{!?need_bootstrap:	%global	need_bootstrap	0}
 
 Summary: Provide a list of changes between two sequenced collections
 Name: %{?scl_prefix}rubygem-%{gem_name}
 Version: 1.2.5
-Release: 6%{?dist}
+Release: 8%{?dist}
 Group: Development/Languages
 #lib/diff/lcs.rb is Artistic or Ruby or BSD
 #lib/diff/lcs/*.rb is GPLv2+ or Artistic or Ruby or BSD
@@ -73,11 +73,12 @@ cp -a .%{_bindir}/* %{buildroot}/%{_bindir}
 find %{buildroot}%{gem_instdir}/bin -type f |xargs chmod a+x
 
 # Fix shebangs.
-sed -i 's|^#!.*|#!/usr/bin/ruby|' %{buildroot}%{gem_instdir}/bin/{htmldiff,ldiff}
-
-%if 0%{?need_bootstrap} < 1
+%{?scl:scl enable %{scl} - << \EOF}
+sed -i "s|^#\!.*|#\!`which ruby`|" %{buildroot}%{gem_instdir}/bin/{htmldiff,ldiff}
+%{?scl:EOF}
 
 %check
+%if 0%{?need_bootstrap} < 1
 pushd .%{gem_instdir}
 # https://github.com/halostatue/diff-lcs/issues/1
 sed -i '/Diff::LCS.patch(s1, diff_s1_s2).should == s2/ s/^/#/' spec/issues_spec.rb
@@ -113,7 +114,10 @@ popd
 %{gem_instdir}/spec
 
 %changelog
-* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 1.2.5-6
+* Thu Mar 03 2016 Pavel Valena <pvalena@redhat.com> - 1.2.5-8
+- Fix shebang paths replacement
+
+* Mon Feb 22 2016 Pavel Valena <pvalena@redhat.com> - 1.2.5-7
 - Rebuilt for rh-ror42
 
 * Fri Jan 16 2015 Josef Stribny <jstribny@redhat.com> - 1.2.5-2
